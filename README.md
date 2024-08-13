@@ -5,3 +5,6 @@ Besides the cookies, I use it extensively to communicate with the frontend, as w
 
 Also, the extension made it possible to migrate all the data from our competitors. 
 So that the switchting cost would be 0.
+
+
+I built this on my own. I used a React template for chrome extension, so hence the contributors :))
