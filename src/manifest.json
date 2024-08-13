@@ -1,30 +1,52 @@
 {
   "manifest_version": 3,
-  "name": "Chrome Extension with React & Webpack",
-  "description": "A chrome extension boilerplate built with React 17, Webpack 5, and Webpack Dev Server 4",
-  "options_page": "options.html",
-  "background": { "service_worker": "background.bundle.js" },
-  "action": {
-    "default_popup": "popup.html",
-    "default_icon": "icon-34.png"
+  "name": "Dexra",
+  "description": "Curate your LinkedIn feed: Build custom lists of people, browse, and engage with their posts — all at one convenient place.",
+  "version": "1.1.4",
+  "background": {
+    "service_worker": "background.bundle.js"
   },
-  "chrome_url_overrides": {
-    "newtab": "newtab.html"
+  "action": {
+    "default_popup": "popup.html"
   },
   "icons": {
-    "128": "icon-128.png"
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   },
+  "permissions": [
+    "cookies",
+    "storage",
+    "alarms",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://www.linkedin.com/*",
+    "https://app.useaware.co/*",
+    "https://dexra.co/*"
+  ],
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
-      "js": ["contentScript.bundle.js"],
-      "css": ["content.styles.css"]
+      "matches": [
+        "https://www.linkedin.com/*",
+        "https://dexra.co/*"
+      ],
+      "css": [
+        "content.styles.css"
+      ],
+      "js": [
+        "contentScript.bundle.js"
+      ],
+      "run_at": "document_start"
     }
   ],
-  "devtools_page": "devtools.html",
   "web_accessible_resources": [
     {
-      "resources": ["content.styles.css", "icon-128.png", "icon-34.png"],
+      "resources": [
+        "icon128.png",
+        "icon48.png",
+        "icon16.png"
+      ],
       "matches": []
     }
   ]

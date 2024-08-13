@@ -1,4 +1,4 @@
-// Do this as the first thing so that any code reading it knows the right env.
+// Set the environment variables for development mode
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
 process.env.ASSET_PATH = '/';
@@ -12,11 +12,12 @@ var WebpackDevServer = require('webpack-dev-server'),
 var options = config.chromeExtensionBoilerplate || {};
 var excludeEntriesToHotReload = options.notHotReload || [];
 
+// Remove the hot-reload entries from config.entry
 for (var entryName in config.entry) {
   if (excludeEntriesToHotReload.indexOf(entryName) === -1) {
+    // No hot reloading scripts are added to these entries
     config.entry[entryName] = [
-      'webpack/hot/dev-server',
-      `webpack-dev-server/client?hot=true&hostname=localhost&port=${env.PORT}`,
+      `webpack-dev-server/client?hostname=localhost&port=${env.PORT}`,
     ].concat(config.entry[entryName]);
   }
 }
@@ -28,12 +29,13 @@ var compiler = webpack(config);
 var server = new WebpackDevServer(
   {
     https: false,
-    hot: true,
-    liveReload: false,
+    hot: false, // Ensure that hot reloading is turned off
+    liveReload: false, // Prevent automatic reloads when files change
     client: {
-      webSocketTransport: 'sockjs',
+      webSocketTransport: 'ws',
+      overlay: false, // Turn off error overlays
     },
-    webSocketServer: 'sockjs',
+    webSocketServer: 'ws',
     host: 'localhost',
     port: env.PORT,
     static: {
@@ -41,7 +43,7 @@ var server = new WebpackDevServer(
     },
     devMiddleware: {
       publicPath: `http://localhost:${env.PORT}/`,
-      writeToDisk: true,
+      writeToDisk: true, // Write files to disk for easy inspection
     },
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -51,6 +53,12 @@ var server = new WebpackDevServer(
   compiler
 );
 
+// Start the Webpack Dev Server
 (async () => {
-  await server.start();
+  try {
+    await server.start();
+    console.log(`Server is running on http://localhost:${env.PORT}`);
+  } catch (err) {
+    console.error('Error starting server:', err);
+  }
 })();
